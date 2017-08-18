@@ -54,6 +54,8 @@
 
 	</aui:select>
 
+	<div id="<portlet:namespace />languageWarning"></div>
+
 	<aui:fieldset cssClass="available-languages" label="available-languages">
 
 		<%
@@ -133,7 +135,7 @@
 
 		List<Theme> themes = ThemeLocalServiceUtil.getPageThemes(company.getCompanyId(), 0, user.getUserId());
 
-		for (Theme curTheme: themes) {
+		for (Theme curTheme : themes) {
 			if (Objects.equals(defaultRegularThemeId, curTheme.getThemeId())) {
 				deployed = true;
 			}
@@ -159,7 +161,7 @@
 
 		List<Theme> themes = ThemeLocalServiceUtil.getControlPanelThemes(company.getCompanyId(), user.getUserId());
 
-		for (Theme curTheme: themes) {
+		for (Theme curTheme : themes) {
 			if (Objects.equals(defaultControlPanelThemeId, curTheme.getThemeId())) {
 				deployed = true;
 			}
@@ -176,3 +178,25 @@
 		</c:if>
 	</aui:select>
 </aui:fieldset>
+
+<aui:script use="aui-base,aui-alert">
+	var languageSelectInput = A.one('#<portlet:namespace />languageId');
+
+	if (languageSelectInput) {
+		languageSelectInput.on(
+			'change',
+			function() {
+				new A.Alert(
+					{
+						bodyContent: '<liferay-ui:message key="this-change-will-only-affect-the-newly-created-localized-content" />',
+						boundingBox: '#<portlet:namespace />languageWarning',
+						closeable: true,
+						cssClass: 'alert-warning',
+						destroyOnHide: false,
+						render: true
+					}
+				);
+			}
+		);
+	}
+</aui:script>
